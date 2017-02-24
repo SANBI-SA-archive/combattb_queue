@@ -1,17 +1,17 @@
 from __future__ import absolute_import, unicode_literals
-from .celery import app
+from .__main__ import app
+from celery import Task
 
 
-@app.task
+class DebugTask(Task):
+    def __call__(self, *args, **kwargs):
+        print('TASK STARTING: {0.name}[{0.request.id}]'.format(self))
+        return super(DebugTask, self).__call__(*args, **kwargs)
+
+@app.task(base=DebugTask)
 def add(x, y):
     return x + y
 
-
-@app.task
-def mul(x, y):
-    return x * y
-
-
-@app.task
-def xsum(numbers):
-    return sum(numbers)
+@app.task(base=DebugTask)
+def submit_task(f):
+    return f()

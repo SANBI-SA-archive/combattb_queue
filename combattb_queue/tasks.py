@@ -1,5 +1,5 @@
 from __future__ import absolute_import, unicode_literals
-from .__main__ import app
+from .celery import app
 from celery import Task
 
 

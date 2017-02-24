@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from .celery import app
 from celery import Task
+import subprocess,os
 
 
 class DebugTask(Task):
@@ -9,9 +10,11 @@ class DebugTask(Task):
         return super(DebugTask, self).__call__(*args, **kwargs)
 
 @app.task(base=DebugTask)
-def add(x, y):
-    return x + y    
-
-@app.task(base=DebugTask)
-def submit_task(f):
-    return f()
+def run_tree_2_neo(history_id):
+    try:
+        p = subprocess.Popen(['tree2neo', "init", "-D", "{}".format(str(os.getcwd()) + "/data/"),
+                                "{}".format(history_id)], stdout=subprocess.PIPE)
+        out, err = p.communicate()
+    except(OSError, ValueError) as e:
+        print(e)
+    return out, err

@@ -4,7 +4,7 @@ from celery import Celery
 app = Celery('combattb_queue',
              broker='pyamqp://guest@localhost//',
              backend='redis://localhost:6379',
-             include=['proj.tasks'])
+             include=['combattb_queue.tasks'])
 
 # Optional configuration, see the application user guide.
 app.conf.update(

@@ -10,7 +10,7 @@ class DebugTask(Task):
 
 @app.task(base=DebugTask)
 def add(x, y):
-    return x + y
+    return x + y    
 
 @app.task(base=DebugTask)
 def submit_task(f):
